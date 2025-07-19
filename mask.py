@@ -37,7 +37,8 @@ def main():
         print(text.replace(tokenizer.mask_token, tokenizer.decode([token])))
 
     # Visualize attentions
-    visualize_attentions(inputs.tokens(), result.attentions)
+    tokens = tokenizer.convert_ids_to_tokens(inputs.input_ids[0])
+    visualize_attentions(tokens, result.attentions)
 
 
 def get_mask_token_index(mask_token_id, inputs):
@@ -63,6 +64,7 @@ def get_color_for_attention_score(attention_score):
     if attention_score < 0 or attention_score > 1:
         raise ValueError("Attention score must be in the range [0, 1].")
     gray_value = int((1 - attention_score) * 255)
+
     return (gray_value, gray_value, gray_value)
 
 def visualize_attentions(tokens, attentions):
@@ -84,6 +86,7 @@ def visualize_attentions(tokens, attentions):
                 tokens,
                 attentions[layer][0][head]
             )
+
 
 
 def generate_diagram(layer_number, head_number, tokens, attention_weights):
@@ -134,6 +137,7 @@ def generate_diagram(layer_number, head_number, tokens, attention_weights):
 
     # Save image
     img.save(f"Attention_Layer{layer_number}_Head{head_number}.png")
+
 
 
 if __name__ == "__main__":
