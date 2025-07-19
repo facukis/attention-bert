@@ -61,12 +61,15 @@ def get_color_for_attention_score(attention_score):
     given `attention_score`. Each value should be in the range [0, 255].
     """
     # FIX: Invert the logic to make higher attention scores lighter.
-    # Use round() for more accurate integer conversion as per check50 expectations.
+    # Use tf.round() for TensorFlow compatibility.
     if attention_score < 0 or attention_score > 1:
         raise ValueError("Attention score must be in the range [0, 1].")
-    gray_value = round(attention_score * 255) # Multiplicamos directamente por 255
+    
+    # Round using TensorFlow's round function to handle tensors
+    gray_value = int(tf.round(attention_score * 255).numpy())  # .numpy() converts to a NumPy value
 
     return (gray_value, gray_value, gray_value)
+
 
 def visualize_attentions(tokens, attentions):
     """
