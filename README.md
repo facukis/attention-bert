@@ -276,16 +276,6 @@ Contributions are welcome! Areas for improvement:
 - Vaswani et al. (2017): "Attention Is All You Need"
 - Clark et al. (2019): "What Does BERT Look At? An Analysis of BERT's Attention"
 
-## 👨‍💻 Author
-
-Built with ❤️ for NLP education and research
-
-## 🎵 Acknowledgments
-
-- Hugging Face for the transformers library
-- Google for the original BERT model
-- The open-source NLP community
-
 ---
 
 **Explore the inner workings of BERT! 🔍🤖**
