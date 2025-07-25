@@ -1,3 +1,9 @@
-pillow
-tensorflow
-transformers
+# Core Machine Learning and NLP
+transformers>=4.21.0
+tensorflow>=2.8.0
+
+# Image Processing for Visualizations
+Pillow>=9.0.0
+
+# Numerical Computing
+numpy>=1.21.0
