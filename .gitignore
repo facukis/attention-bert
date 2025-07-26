@@ -115,6 +115,7 @@ dmypy.json
 
 # Attention visualization outputs
 Attention_Layer*.png
+attention_diagrams/
 
 # Model cache
 .cache/

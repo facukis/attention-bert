@@ -43,6 +43,8 @@ bert-attention-visualizer/
 ├── mask.py                 # Main application
 ├── requirements.txt        # Python dependencies
 ├── analysis.md            # Attention analysis results
+├── setup.sh               # Installation script
+├── attention_diagrams/    # Generated attention visualizations
 ├── assets/
 │   └── fonts/
 │       └── OpenSans-Regular.ttf  # Font for visualizations
@@ -71,7 +73,8 @@ bert-attention-visualizer/
    ```
 
 4. **Check generated attention diagrams**:
-   - Files will be saved as `Attention_Layer{X}_Head{Y}.png`
+   - Files will be saved in the `attention_diagrams/` folder
+   - Each diagram is named as `Attention_Layer{X}_Head{Y}.png`
    - Each diagram shows attention weights between tokens
 
 ### Advanced Examples
@@ -152,6 +155,7 @@ PIXELS_PER_WORD = 200       # Space for token labels
 ```txt
 transformers>=4.21.0
 tensorflow>=2.8.0
+tf-keras>=2.15.0
 Pillow>=9.0.0
 numpy>=1.21.0
 ```

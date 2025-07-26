@@ -1,4 +1,5 @@
 import sys
+import os
 import tensorflow as tf 
 
 from PIL import Image, ImageDraw, ImageFont
@@ -15,8 +16,15 @@ FONT = ImageFont.truetype("assets/fonts/OpenSans-Regular.ttf", 28)
 GRID_SIZE = 40
 PIXELS_PER_WORD = 200
 
+# Output directory for attention diagrams
+OUTPUT_DIR = "attention_diagrams"
+
 
 def main():
+    # Create output directory if it doesn't exist
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    print(f"📁 Attention diagrams will be saved to: {OUTPUT_DIR}/")
+    
     text = input("Text: ")
 
     # Tokenize input
@@ -27,18 +35,25 @@ def main():
         sys.exit(f"Input must include mask token {tokenizer.mask_token}.")
 
     # Use model to process input
+    print("🤖 Loading BERT model...")
     model = TFBertForMaskedLM.from_pretrained(MODEL)
+    print("🔄 Processing text and generating attention...")
     result = model(**inputs, output_attentions=True)
 
     # Generate predictions
+    print("\n🎯 Top predictions:")
     mask_token_logits = result.logits[0, mask_token_index]
     top_tokens = tf.math.top_k(mask_token_logits, K).indices.numpy()
-    for token in top_tokens:
-        print(text.replace(tokenizer.mask_token, tokenizer.decode([token])))
+    for i, token in enumerate(top_tokens, 1):
+        prediction = text.replace(tokenizer.mask_token, tokenizer.decode([token]))
+        print(f"{i}. {prediction}")
 
     # Visualize attentions
+    print(f"\n🖼️  Generating attention diagrams...")
     tokens = tokenizer.convert_ids_to_tokens(inputs.input_ids[0])
-    visualize_attentions(tokens, result.attentions)
+    diagram_count = visualize_attentions(tokens, result.attentions)
+    print(f"✅ Generated {diagram_count} attention diagrams in {OUTPUT_DIR}/")
+    print(f"📊 Layers: {len(result.attentions)}, Heads per layer: {result.attentions[0].shape[1]}")
 
 
 def get_mask_token_index(mask_token_id, inputs):
@@ -81,8 +96,7 @@ def visualize_attentions(tokens, attentions):
     include both the layer number (starting count from 1) and head number
     (starting count from 1).
     """
-    # TODO: Update this function to produce diagrams for all layers and heads.
-    # Ya está implementado correctamente, el bucle for anidado itera sobre todas las capas y cabezas.
+    diagram_count = 0
     for layer in range(len(attentions)):
         for head in range(attentions[layer].shape[1]):
             generate_diagram(
@@ -91,6 +105,8 @@ def visualize_attentions(tokens, attentions):
                 tokens,
                 attentions[layer][0][head]
             )
+            diagram_count += 1
+    return diagram_count
 
 
 
@@ -141,7 +157,10 @@ def generate_diagram(layer_number, head_number, tokens, attention_weights):
             draw.rectangle((x, y, x + GRID_SIZE, y + GRID_SIZE), fill=color)
 
     # Save image
-    img.save(f"Attention_Layer{layer_number}_Head{head_number}.png")
+    filename = f"Attention_Layer{layer_number}_Head{head_number}.png"
+    filepath = os.path.join(OUTPUT_DIR, filename)
+    img.save(filepath)
+    print(f"  💾 Saved: {filename}")
 
 
 

@@ -1,6 +1,7 @@
 # Core Machine Learning and NLP
 transformers>=4.21.0
 tensorflow>=2.8.0
+tf-keras>=2.15.0
 
 # Image Processing for Visualizations
 Pillow>=9.0.0
